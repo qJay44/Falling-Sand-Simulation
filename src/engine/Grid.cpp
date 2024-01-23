@@ -1,6 +1,7 @@
 #include "Grid.hpp"
 
 #define IX(x, y) ((x) + (y) * (COLUMNS))
+#define BRUSH_SIZE 5
 
 Grid::Grid() {}
 Grid::~Grid() {}
@@ -37,31 +38,28 @@ void Grid::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 void Grid::add(sf::Vector2i pos) {
   int col = std::clamp(pos.x / SCALE, 0, COLUMNS - 1);
   int row = std::clamp(pos.y / SCALE, 0, ROWS - 1);
-  grid[IX(col, row)].add();
+  grid[IX(col, row)].fill();
 }
 
 void Grid::update() {
-  for (int x = 0; x < COLUMNS; x++) {
-    for (int y = 0; y < ROWS; y++) {
+  static const auto leftPriority = [this](Cell& cell, int x, int y) {
+    if (!cell.fall(grid[IX(x, y + 1)]) && x - 1 > 0)             // Try to fall bellow
+      if (!cell.fall(grid[IX(x - 1, y + 1)]) && x + 1 < COLUMNS) // Try to fall bellow on the left side
+        cell.fall(grid[IX(x + 1, y + 1)]);                       // Try to fall bellow on the right side
+  };
+
+  static const auto rightPriority = [this](Cell& cell, int x, int y) {
+    if (!cell.fall(grid[IX(x, y + 1)]) && x + 1 > 0)             // Try to fall bellow
+      if (!cell.fall(grid[IX(x + 1, y + 1)]) && x - 1 < COLUMNS) // Try to fall bellow on the right side
+        cell.fall(grid[IX(x - 1, y + 1)]);                       // Try to fall bellow on the left side
+  };
+
+  for (int x = COLUMNS - 1; x >= 0; x--) {
+    for (int y = ROWS - 1; y >= 0; y--) {
       Cell& cell = grid[IX(x, y)];
 
-      // The cell have contains sand and have a neighbour bellow
-      if (cell.getColor() && y + 1 < ROWS) {
-        Cell& bellow = grid[IX(x, y + 1)];
-
-        // Try to fall bellow
-        if (!bellow.fall(cell) && x - 1 > 0) {
-          bellow = grid[IX(x - 1, y + 1)];
-
-          // Try to fall bellow on the left side
-          if (!bellow.fall(cell) && x + 1 < COLUMNS) {
-
-            // Try to fall bellow on the right side
-            bellow = grid[IX(x + 1, y + 1)];
-            bellow.fall(cell);
-          }
-        }
-      }
+      if (cell.getColor() && y + 1 < ROWS)
+        rand() % 2 ? leftPriority(cell, x, y) : rightPriority(cell, x, y);
     }
   }
 }

@@ -5,11 +5,9 @@ class App {
   sf::Font genericFont;
   Grid grid;
 
-  uint8_t addType = SAND;
-
   void setupSFML() {
     // Setup main window
-    window.create(sf::VideoMode(WIDTH, HEIGHT), "Template text", sf::Style::Close);
+    window.create(sf::VideoMode(WIDTH, HEIGHT), "Falling sand simulation", sf::Style::Close);
     window.setFramerateLimit(75);
 
     // Font for some test text

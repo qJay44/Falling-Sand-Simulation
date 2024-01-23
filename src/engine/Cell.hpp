@@ -1,18 +1,18 @@
-#include <stdint.h>
+#include "colormap.hpp"
 
 class Cell {
   uint32_t color = 0;
 
 public:
-  // The cell contains a sand if color has a value more than 0x00000000
+  // The cell contains a sand if the color has a value more than 0x00000000
   const uint32_t& getColor() const {
     return color;
   }
 
-  bool fall(Cell& rhs) {
-    if (!getColor()) {
-      color = rhs.color;
-      rhs.color = 0;
+  bool fall(Cell& where) {
+    if (!where.getColor()) {
+      where.color = color;
+      color = 0;
 
       return true;
     }
@@ -20,8 +20,10 @@ public:
     return false;
   }
 
-  void add() {
-    color = 0xffff00ff;
+  void fill() {
+    static float i = 0.f;
+    color = plasma[int(i) % 256];
+    i += 0.2f;
   }
 };
 

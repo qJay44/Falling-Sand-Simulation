@@ -10,10 +10,10 @@ if not exist ..\compile_commands.json move compile_commands.json ..\
 
 Rem Copy dlls
 setlocal
-set SFML_BINARYS="C:\Users\gerku\Documents\LIDL programs\SFML-2.6.0\bin"
-if not exist sfml-system-d-2.dll   copy   %SFML_BINARYS%\sfml-system-d-2.dll .
-if not exist sfml-graphics-d-2.dll copy   %SFML_BINARYS%\sfml-graphics-d-2.dll .
-if not exist sfml-window-d-2.dll   copy   %SFML_BINARYS%\sfml-window-d-2.dll .
+set SFML_BINARIES="C:\Users\gerku\Documents\LIDL programs\SFML-2.6.0\bin"
+if not exist sfml-system-d-2.dll   copy   %SFML_BINARIES%\sfml-system-d-2.dll .
+if not exist sfml-graphics-d-2.dll copy   %SFML_BINARIES%\sfml-graphics-d-2.dll .
+if not exist sfml-window-d-2.dll   copy   %SFML_BINARIES%\sfml-window-d-2.dll .
 endlocal
 
 cd ../../
