@@ -20,18 +20,6 @@ class App {
     srand((unsigned)time(NULL));
   }
 
-  void update() {
-    grid.update();
-  }
-
-  void draw() {
-    window.draw(grid);
-  }
-
-  void spawnElement(uint8_t type, sf::Vector2i mouse) {
-    grid.addElement(type, mouse);
-  }
-
   public:
     App() {}
 
@@ -54,26 +42,18 @@ class App {
               case sf::Keyboard::Q:
                 window.close();
                 break;
-              case sf::Keyboard::Num1:
-                addType = SAND;
-                break;
-              case sf::Keyboard::Num2:
-                addType = WATER;
-                break;
               default:
                 break;
             }
         }
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-          spawnElement(addType, sf::Mouse::getPosition(window));
+          grid.add(sf::Mouse::getPosition(window));
 
-        update();
+        grid.update();
 
         window.clear();
-
-        draw();
-
+        window.draw(grid);
         window.display();
       }
     }

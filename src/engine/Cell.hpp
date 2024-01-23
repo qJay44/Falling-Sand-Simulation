@@ -1,43 +1,27 @@
-#include "Element.hpp"
-#include "myutils.hpp"
+#include <stdint.h>
 
-class Cell : public sf::RectangleShape {
-  Element* content = nullptr;
+class Cell {
+  uint32_t color = 0;
 
-  public:
-    ~Cell() {
-      delete content;
+public:
+  // The cell contains a sand if color has a value more than 0x00000000
+  const uint32_t& getColor() const {
+    return color;
+  }
+
+  bool fall(Cell& rhs) {
+    if (!getColor()) {
+      color = rhs.color;
+      rhs.color = 0;
+
+      return true;
     }
 
-    [[nodiscard]]
-    bool hasContent() const {
-      return content;
-    }
+    return false;
+  }
 
-    [[nodiscard]]
-    const Element* getElement() const {
-      return content;
-    }
-
-    void update(Element* c) {
-      content = c;
-      setFillColor(c->getColor());
-    }
-
-    void update(Cell& rhs) {
-      content = rhs.content;
-      setFillColor(content->getColor());
-
-      rhs.content = nullptr;
-      rhs.setFillColor(sf::Color::Black);
-    }
-
-    void swap(Cell& rhs) {
-      Element* el1 = content;
-      Element* el2 = rhs.content;
-
-      update(el2);
-      rhs.update(el1);
-    }
+  void add() {
+    color = 0xffff00ff;
+  }
 };
 
