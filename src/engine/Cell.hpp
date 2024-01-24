@@ -1,6 +1,5 @@
 #include "../pch.h"
 #include "colormap.hpp"
-#include <array>
 
 class Cell {
   sf::Vertex* v1 = nullptr;
@@ -23,13 +22,12 @@ class Cell {
   }
 
 public:
-  // The cell contains a sand if an alpha value more than 0
-  const sf::Uint8& getColor() const {
-    return v1->color.a;
+  const bool isFilled() const {
+    return v1->color.a; // Contains a sand if an alpha value more than 0
   }
 
   bool fall(Cell& where) {
-    if (!where.getColor()) {
+    if (!where.isFilled()) {
       where.setColor(v1->color);
       clearColor();
 
@@ -51,11 +49,13 @@ public:
     static bool reversed = false;
     static float i = 0.f;
 
-    if (!getColor()) {
-      setColor(sf::Color(plasma[int(i)]));
+    if (!isFilled()) {
+      setColor(sf::Color(plasma[(int)i]));
+
+      // Go backwards if "i" reached the end and vice versa
       if (reversed) {
         i -= step;
-        reversed = i <= 0 ? false : true;
+        reversed = !(i <= 0);
       } else {
         i += step;
         reversed = i >= 255;

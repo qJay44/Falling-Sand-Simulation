@@ -15,22 +15,11 @@ Grid::Grid() {
     for (int y = 0; y < ROWS; y++) {
       int ii = i++ << 2;
       int index = IX(x, y);
-      sf::VertexArray quad{sf::Quads, 4};
 
-      quad[0].position = sf::Vector2f(x * SCALE, y * SCALE);
-      quad[1].position = sf::Vector2f(x * SCALE + SCALE, y * SCALE);
-      quad[2].position = sf::Vector2f(x * SCALE + SCALE, y * SCALE + SCALE);
-      quad[3].position = sf::Vector2f(x * SCALE, y * SCALE + SCALE);
-
-      quad[0].color = sf::Color(0);
-      quad[1].color = sf::Color(0);
-      quad[2].color = sf::Color(0);
-      quad[3].color = sf::Color(0);
-
-      vertices[ii + 0] = quad[0];
-      vertices[ii + 1] = quad[1];
-      vertices[ii + 2] = quad[2];
-      vertices[ii + 3] = quad[3];
+      vertices[ii + 0] = {sf::Vector2f(x * SCALE, y * SCALE), sf::Color(0)};
+      vertices[ii + 1] = {sf::Vector2f(x * SCALE + SCALE, y * SCALE), sf::Color(0)};
+      vertices[ii + 2] = {sf::Vector2f(x * SCALE + SCALE, y * SCALE + SCALE), sf::Color(0)};
+      vertices[ii + 3] = {sf::Vector2f(x * SCALE, y * SCALE + SCALE), sf::Color(0)};
 
       grid[index].setupVertices(vertices[ii], vertices[ii + 1], vertices[ii + 2], vertices[ii + 3]);
     }
@@ -72,7 +61,7 @@ void Grid::update() {
     for (int y = ROWS - 1; y >= 0; y--) {
       Cell& cell = grid[IX(x, y)];
 
-      if (cell.getColor() && y + 1 < ROWS)
+      if (cell.isFilled() && y + 1 < ROWS)
         rand() % 2 ? leftPriority(cell, x, y) : rightPriority(cell, x, y);
     }
   }

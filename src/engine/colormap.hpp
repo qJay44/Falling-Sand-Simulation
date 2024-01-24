@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-const uint32_t plasma[256] {
+constexpr uint32_t plasma[256] {
   0x0c0786ff,
   0x100787ff,
   0x130689ff,
