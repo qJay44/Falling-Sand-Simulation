@@ -1,13 +1,13 @@
 #include "../pch.h"
 #include "Cell.hpp"
-#include <array>
+#include <vector>
 
 class Grid : public sf::Drawable, public sf::Transformable {
-  std::array<Cell, ROWS * COLUMNS> grid;
+  std::vector<Cell> grid;
+  std::vector<sf::Vertex>vertices;
 
   public:
     Grid();
-    ~Grid();
 
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
