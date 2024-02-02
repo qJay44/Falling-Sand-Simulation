@@ -1,5 +1,4 @@
 #include <cmath>
-#include <stdio.h>
 #include "Grid.hpp"
 
 #define IX(x, y) ((x) + (y) * (COLUMNS))
@@ -45,6 +44,8 @@ void Grid::add(sf::Vector2i pos) {
 }
 
 void Grid::update() {
+  constexpr char substep = 3;
+
   static const auto leftPriority = [this](Cell& cell, int x, int y) {
     if (!cell.fall(grid[IX(x, y + 1)]) && x - 1 >= 0)            // Try to fall bellow
       if (!cell.fall(grid[IX(x - 1, y + 1)]) && x + 1 < COLUMNS) // Try to fall bellow on the left side
@@ -57,12 +58,14 @@ void Grid::update() {
         cell.fall(grid[IX(x - 1, y + 1)]);                  // Try to fall bellow on the left side
   };
 
-  for (int x = COLUMNS - 1; x >= 0; x--) {
-    for (int y = ROWS - 1; y >= 0; y--) {
-      Cell& cell = grid[IX(x, y)];
+  for (int i = 0; i < substep; i++) {
+    for (int x = COLUMNS - 1; x >= 0; x--) {
+      for (int y = ROWS - 1; y >= 0; y--) {
+        Cell& cell = grid[IX(x, y)];
 
-      if (cell.isFilled() && y + 1 < ROWS)
-        rand() % 2 ? leftPriority(cell, x, y) : rightPriority(cell, x, y);
+        if (cell.isFilled() && y + 1 < ROWS)
+          rand() & 1 ? leftPriority(cell, x, y) : rightPriority(cell, x, y);
+      }
     }
   }
 }

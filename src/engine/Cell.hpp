@@ -2,6 +2,7 @@
 #include "colormap.hpp"
 
 class Cell {
+
   sf::Vertex* v1 = nullptr;
   sf::Vertex* v2 = nullptr;
   sf::Vertex* v3 = nullptr;
